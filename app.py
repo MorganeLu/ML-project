@@ -69,12 +69,12 @@ class AudioTokenWrapper(torch.nn.Module):
             self.unet.set_attn_processor(lora_attn_procs)
             self.lora_layers = AttnProcsLayers(self.unet.attn_processors)
             self.lora_layers.eval()
-            lora_layers_learned_embeds = 'models/embedder_learned_embeds.bin'
+            lora_layers_learned_embeds = 'models/lora_layers_learned_embeds.bin'
             self.lora_layers.load_state_dict(torch.load(lora_layers_learned_embeds, map_location=device))
             self.unet.load_attn_procs(lora_layers_learned_embeds)
 
         self.embedder.eval()
-        embedder_learned_embeds = 'models/lora_layers_learned_embeds.bin'
+        embedder_learned_embeds = 'models/embedder_learned_embeds.bin'
         self.embedder.load_state_dict(torch.load(embedder_learned_embeds, map_location=device))
 
         self.placeholder_token = '<*>'
@@ -141,4 +141,3 @@ if __name__ == "__main__":
         examples=examples
     )
     demo.launch()
-
