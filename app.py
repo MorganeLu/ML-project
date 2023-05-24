@@ -129,7 +129,7 @@ if __name__ == "__main__":
         ["assets/dog barking.wav"],
         ["assets/airplane.wav"],
         ["assets/electric guitar.wav"],
-        ["assets/female sings.wav"],
+        # ["assets/female sings.wav"],
     ]
 
     demo = gr.Interface(
