@@ -35,7 +35,7 @@ class AudioTokenWrapper(torch.nn.Module):
         )
 
         checkpoint = torch.load(
-            'BEATs_iter3_plus_AS2M_finetuned_on_AS2M_cpt2.pt')
+            'models/BEATs_iter3_plus_AS2M_finetuned_on_AS2M_cpt2.pt')
         cfg = BEATsConfig(checkpoint['cfg'])
         self.aud_encoder = BEATs(cfg)
         self.aud_encoder.load_state_dict(checkpoint['model'])
@@ -69,12 +69,12 @@ class AudioTokenWrapper(torch.nn.Module):
             self.unet.set_attn_processor(lora_attn_procs)
             self.lora_layers = AttnProcsLayers(self.unet.attn_processors)
             self.lora_layers.eval()
-            lora_layers_learned_embeds = 'sd1_lora_qi_lora_layers_learned_embeds-40000.bin'
+            lora_layers_learned_embeds = 'models/embedder_learned_embeds.bin'
             self.lora_layers.load_state_dict(torch.load(lora_layers_learned_embeds, map_location=device))
             self.unet.load_attn_procs(lora_layers_learned_embeds)
 
         self.embedder.eval()
-        embedder_learned_embeds = 'sd1_lora_qi_learned_embeds-40000.bin'
+        embedder_learned_embeds = 'models/lora_layers_learned_embeds.bin'
         self.embedder.load_state_dict(torch.load(embedder_learned_embeds, map_location=device))
 
         self.placeholder_token = '<*>'
