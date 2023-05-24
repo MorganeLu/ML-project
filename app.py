@@ -127,8 +127,8 @@ if __name__ == "__main__":
     examples = [
         ["assets/train.wav"],
         ["assets/dog barking.wav"],
-        ["assets/airplane.wav"],
-        ["assets/electric guitar.wav"],
+        # ["assets/airplane.wav"],
+        # ["assets/electric guitar.wav"],
         # ["assets/female sings.wav"],
     ]
 
