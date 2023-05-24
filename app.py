@@ -35,7 +35,7 @@ class AudioTokenWrapper(torch.nn.Module):
         )
 
         checkpoint = torch.load(
-            'models/BEATs_iter3_plus_AS2M_finetuned_on_AS2M_cpt2.pt')
+            'BEATs_iter3_plus_AS2M_finetuned_on_AS2M_cpt2.pt')
         cfg = BEATsConfig(checkpoint['cfg'])
         self.aud_encoder = BEATs(cfg)
         self.aud_encoder.load_state_dict(checkpoint['model'])
@@ -69,12 +69,12 @@ class AudioTokenWrapper(torch.nn.Module):
             self.unet.set_attn_processor(lora_attn_procs)
             self.lora_layers = AttnProcsLayers(self.unet.attn_processors)
             self.lora_layers.eval()
-            lora_layers_learned_embeds = 'models/lora_layers_learned_embeds.bin'
+            lora_layers_learned_embeds = 'sd1_lora_qi_lora_layers_learned_embeds-40000.bin'
             self.lora_layers.load_state_dict(torch.load(lora_layers_learned_embeds, map_location=device))
             self.unet.load_attn_procs(lora_layers_learned_embeds)
 
         self.embedder.eval()
-        embedder_learned_embeds = 'models/embedder_learned_embeds.bin'
+        embedder_learned_embeds = 'sd1_lora_qi_learned_embeds-40000.bin'
         self.embedder.load_state_dict(torch.load(embedder_learned_embeds, map_location=device))
 
         self.placeholder_token = '<*>'
@@ -111,27 +111,25 @@ def greet(audio):
     image = pipeline(prompt, num_inference_steps=50, guidance_scale=7.5).images[0]
     return image
 
-description = """
-This is a demo of [AudioToken: Adaptation of Text-Conditioned Diffusion Models for Audio-to-Image Generation](https://pages.cs.huji.ac.il/adiyoss-lab/AudioToken/)
-"""
-
 
 if __name__ == "__main__":
 
     lora = True
-    device = 'cpu'
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     model = AudioTokenWrapper(lora, device)
 
     description = """<p>
-    This is a demo of <a href='https://pages.cs.huji.ac.il/adiyoss-lab/AudioToken' target='_blank'>AudioToken: Adaptation of Text-Conditioned Diffusion Models for Audio-to-Image Generation</a><br>.
-    Simply upload an audio to test your own case.<br>
+    This is a demo of <a href='https://pages.cs.huji.ac.il/adiyoss-lab/AudioToken' target='_blank'>AudioToken: Adaptation of Text-Conditioned Diffusion Models for Audio-to-Image Generation</a>.<br><br>
+    In recent years, image generation has shown a great leap in performance, where diffusion models play a central role. Although generating high-quality images, such models are mainly conditioned on textual descriptions. This begs the question: "how can we adopt such models to be conditioned on other modalities?". We propose a novel method utilizing latent diffusion models trained for text-to-image-generation to generate images conditioned on audio recordings. Using a pre-trained audio encoding model, the proposed method encodes audio into a new token, which can be considered as an adaptation layer between the audio and text representations. Such a modeling paradigm requires a small number of trainable parameters, making the proposed approach appealing for lightweight optimization.<br><br>
     For more information, please see the original <a href='https://arxiv.org/abs/2305.13050' target='_blank'>paper</a> and <a href='https://github.com/guyyariv/AudioToken' target='_blank'>repo</a>.
     </p>"""
 
     examples = [
         ["assets/train.wav"],
         ["assets/dog barking.wav"],
-        ["assets/airplane.wav"]
+        ["assets/airplane.wav"],
+        ["assets/electric guitar.wav"],
+        ["assets/female singer.wav"],
     ]
 
     demo = gr.Interface(
@@ -140,7 +138,7 @@ if __name__ == "__main__":
         outputs="image",
         title='AudioToken',
         description=description,
-        # examples=examples
+        examples=examples
     )
     demo.launch()
 
