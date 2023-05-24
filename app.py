@@ -122,11 +122,11 @@ if __name__ == "__main__":
     device = 'cpu'
     model = AudioTokenWrapper(lora, device)
 
-    description = """
-    This is a demo of [AudioToken: Adaptation of Text-Conditioned Diffusion Models for Audio-to-Image Generation](https://pages.cs.huji.ac.il/adiyoss-lab/AudioToken/).<br>
+    description = """<p>
+    This is a demo of <a href='https://pages.cs.huji.ac.il/adiyoss-lab/AudioToken' target='_blank'>AudioToken: Adaptation of Text-Conditioned Diffusion Models for Audio-to-Image Generation</a><br>.
     Simply upload an audio to test your own case.<br>
-    For more information, please see the original [paper](https://arxiv.org/abs/2305.13050) and [repo](https://github.com/guyyariv/AudioToken/).
-    """
+    For more information, please see the original <a href='https://arxiv.org/abs/2305.13050' target='_blank'>paper</a> and <a href='https://github.com/guyyariv/AudioToken' target='_blank'>repo</a>.
+    </p>"""
 
     examples = [
         ["assets/train.wav"],
@@ -140,7 +140,7 @@ if __name__ == "__main__":
         outputs="image",
         title='AudioToken',
         description=description,
-        examples=examples
+        # examples=examples
     )
     demo.launch()
 
