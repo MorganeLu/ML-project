@@ -114,7 +114,7 @@ def greet(audio):
 
 if __name__ == "__main__":
 
-    lora = True
+    lora = False
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     model = AudioTokenWrapper(lora, device)
 
@@ -125,9 +125,9 @@ if __name__ == "__main__":
     </p>"""
 
     examples = [
-        ["assets/train.wav"],
+        # ["assets/train.wav"],
         ["assets/dog barking.wav"],
-        # ["assets/airplane.wav"],
+        ["assets/airplane.wav"],
         # ["assets/electric guitar.wav"],
         # ["assets/female sings.wav"],
     ]
