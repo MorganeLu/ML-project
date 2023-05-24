@@ -108,7 +108,7 @@ def greet(audio):
         vae=model.vae,
         unet=model.unet,
     ).to(device)
-    image = pipeline(prompt, num_inference_steps=30, guidance_scale=7.5).images[0]
+    image = pipeline(prompt, num_inference_steps=40, guidance_scale=7.5).images[0]
     return image
 
 
