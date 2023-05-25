@@ -91,6 +91,9 @@ class AudioTokenWrapper(torch.nn.Module):
 
 def greet(audio):
     audio = audio[-1].astype(np.float32, order='C') / 32768.0
+    if audio.ndim == 2:
+        audio = audio.sum(axis=1) / 2
+
     weight_dtype = torch.float32
     prompt = 'a photo of <*>'
 
@@ -140,6 +143,6 @@ if __name__ == "__main__":
         outputs="image",
         title='AudioToken',
         description=description,
-        examples=examples
+        # examples=examples
     )
     demo.launch()
