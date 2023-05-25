@@ -128,7 +128,7 @@ if __name__ == "__main__":
 
     examples = [
         # ["assets/train.wav"],
-        # ["assets/dog barking.wav"],
+        ["assets/dog barking.wav"],
         ["assets/airplane taking off.wav"],
         # ["assets/electric guitar.wav"],
         # ["assets/female sings.wav"],
@@ -140,6 +140,6 @@ if __name__ == "__main__":
         outputs="image",
         title='AudioToken',
         description=description,
-        examples=examples
+        # examples=examples
     )
     demo.launch()
