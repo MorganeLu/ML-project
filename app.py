@@ -95,6 +95,8 @@ def greet(audio):
     prompt = 'a photo of <*>'
 
     audio_values = torch.unsqueeze(torch.tensor(audio), dim=0).to(device).to(dtype=weight_dtype)
+    if audio_values.ndim == 1:
+        audio_values = torch.unsqueeze(audio_values, dim=0)
     aud_features = model.aud_encoder.extract_features(audio_values)[1]
     audio_token = model.embedder(aud_features)
 
@@ -126,7 +128,7 @@ if __name__ == "__main__":
 
     examples = [
         # ["assets/train.wav"],
-        ["assets/dog barking.wav"],
+        # ["assets/dog barking.wav"],
         ["assets/airplane taking off.wav"],
         # ["assets/electric guitar.wav"],
         # ["assets/female sings.wav"],
