@@ -157,6 +157,6 @@ if __name__ == "__main__":
         outputs="image",
         title='AudioToken',
         description=description,
-        examples=examples
+        # examples=examples
     )
     demo.launch()
