@@ -8,6 +8,7 @@ from diffusers.models.attention_processor import LoRAAttnProcessor
 from diffusers import StableDiffusionPipeline
 import numpy as np
 import gradio as gr
+from scipy import signal
 
 
 class AudioTokenWrapper(torch.nn.Module):
@@ -90,9 +91,22 @@ class AudioTokenWrapper(torch.nn.Module):
 
 
 def greet(audio):
-    audio = audio[-1].astype(np.float32, order='C') / 32768.0
+    sample_rate, audio = audio
+    audio = audio.astype(np.float32, order='C') / 32768.0
+    desired_sample_rate = 16000
+
     if audio.ndim == 2:
         audio = audio.sum(axis=1) / 2
+
+    if sample_rate != desired_sample_rate:
+        # Calculate the resampling ratio
+        resample_ratio = desired_sample_rate / sample_rate
+
+        # Determine the new length of the audio data after downsampling
+        new_length = int(len(audio) * resample_ratio)
+
+        # Downsample the audio data using resample
+        audio = signal.resample(audio, new_length)
 
     weight_dtype = torch.float32
     prompt = 'a photo of <*>'
@@ -143,6 +157,6 @@ if __name__ == "__main__":
         outputs="image",
         title='AudioToken',
         description=description,
-        examples=examples
+        # examples=examples
     )
     demo.launch()
