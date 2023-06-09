@@ -10,3 +10,4 @@ pandas
 torchaudio
 datasets
 scipy
+gradio

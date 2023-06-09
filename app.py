@@ -133,30 +133,34 @@ def greet(audio):
 
 if __name__ == "__main__":
 
+
     lora = False
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     model = AudioTokenWrapper(lora, device)
-
+    model = model.to(device)
+    # gardio
     description = """<p>
-    This is a demo of <a href='https://pages.cs.huji.ac.il/adiyoss-lab/AudioToken' target='_blank'>AudioToken: Adaptation of Text-Conditioned Diffusion Models for Audio-to-Image Generation</a>.<br><br>
-    A novel method utilizing latent diffusion models trained for text-to-image-generation to generate images conditioned on audio recordings. Using a pre-trained audio encoding model, the proposed method encodes audio into a new token, which can be considered as an adaptation layer between the audio and text representations.<br><br>
-    For more information, please see the original <a href='https://arxiv.org/abs/2305.13050' target='_blank'>paper</a> and <a href='https://github.com/guyyariv/AudioToken' target='_blank'>repo</a>.
+    This is from AudioToken: Adaptation of Text-Conditioned Diffusion Models for Audio-to-Image Generation <a href='https://arxiv.org/abs/2305.13050' target='_blank'>paper</a>.<br><br>
+    Its GitHub link is <a href='https://github.com/guyyariv/AudioToken' target='_blank'>here</a>.<br><br>
+    We deploy this project by gradio and you can use the examples at the end of this page.
     </p>"""
 
     examples = [
-        # ["assets/train.wav"],
+        ["assets/train.wav"],
+        ["assets/1900.wav"],
+        ["assets/love story.wav"],
         ["assets/dog barking.wav"],
-        ["assets/airplane taking off.wav"],
-        # ["assets/electric guitar.wav"],
-        # ["assets/female sings.wav"],
+        ["assets/ryuki.wav"],
     ]
 
     demo = gr.Interface(
         fn=greet,
         inputs="audio",
         outputs="image",
-        title='AudioToken',
+        title='Audio-to-Image Generation',
         description=description,
         examples=examples
     )
-    demo.launch()
+    demo.launch(share=True)
+    # demo.launch(server_name='127.0.0.1', server_port=5050)
+
